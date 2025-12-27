@@ -2,7 +2,7 @@ DROP SCHEMA IF EXISTS app CASCADE;
 CREATE SCHEMA app;
 
 CREATE TABLE app.user (
-  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  id UUID NOT NULL DEFAULT uuidv7(),
 
   created_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,7 +36,7 @@ CREATE TABLE app.post (
   likes    INTEGER       NOT NULL DEFAULT 0,
   dislikes INTEGER       NOT NULL DEFAULT 0,
 
-  s_app_t_user_c_user INTEGER NOT NULL,
+  s_app_t_user_c_user UUID NOT NULL,
 
   CONSTRAINT pk_s_app_t_post PRIMARY KEY (id),
 
@@ -62,7 +62,7 @@ CREATE TABLE app.comment (
   dislikes INTEGER       NOT NULL DEFAULT 0,
 
   s_app_t_post_c_post INTEGER NOT NULL,
-  s_app_t_user_c_user INTEGER NOT NULL,
+  s_app_t_user_c_user UUID    NOT NULL,
 
   CONSTRAINT pk_s_app_t_comment PRIMARY KEY (id),
 
