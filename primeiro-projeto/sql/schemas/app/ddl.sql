@@ -1,0 +1,78 @@
+DROP SCHEMA IF EXISTS app CASCADE;
+CREATE SCHEMA app;
+
+CREATE TABLE app.user (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted_at  TIMESTAMPTZ     NULL DEFAULT NULL,
+  disabled_at TIMESTAMPTZ     NULL DEFAULT NULL,
+
+  is_deleted  BOOLEAN NOT NULL DEFAULT FALSE,
+  is_disabled BOOLEAN NOT NULL DEFAULT FALSE,
+
+  name      VARCHAR(150) NOT NULL,
+  birthdate TIMESTAMPTZ  NOT NULL,
+  sex       VARCHAR(1)   NOT NULL,
+  email     VARCHAR(79)  NOT NULL,
+  phone     VARCHAR(11)  NOT NULL,
+  password  VARCHAR(128) NOT NULL,
+
+  CONSTRAINT pk_s_app_t_user PRIMARY KEY (id)
+);
+
+CREATE TABLE app.post (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted_at  TIMESTAMPTZ     NULL DEFAULT NULL,
+
+  is_deleted  BOOLEAN NOT NULL DEFAULT FALSE,
+
+  title VARCHAR(100)  NOT NULL,
+  body  VARCHAR(2000) NOT NULL,
+
+  s_app_t_user_c_user INTEGER NOT NULL,
+
+  CONSTRAINT pk_s_app_t_post PRIMARY KEY (id),
+
+  CONSTRAINT fk_s_app_t_post_c_user
+    FOREIGN KEY (s_app_t_user_c_user)
+    REFERENCES app.user (id)
+    ON UPDATE RESTRICT
+    ON DELETE RESTRICT
+    NOT DEFERRABLE
+);
+
+CREATE TABLE app.comment (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted_at  TIMESTAMPTZ     NULL DEFAULT NULL,
+
+  is_deleted  BOOLEAN NOT NULL DEFAULT FALSE,
+
+  body VARCHAR(2000) NOT NULL,
+
+  s_app_t_post_c_post INTEGER NOT NULL,
+  s_app_t_user_c_user INTEGER NOT NULL,
+
+  CONSTRAINT pk_s_app_t_comment PRIMARY KEY (id),
+
+  CONSTRAINT fk_s_app_t_comment_c_post
+    FOREIGN KEY (s_app_t_post_c_post)
+    REFERENCES app.post (id)
+    ON UPDATE RESTRICT
+    ON DELETE RESTRICT
+    NOT DEFERRABLE,
+
+  CONSTRAINT fk_s_app_t_comment_c_user
+    FOREIGN KEY (s_app_t_user_c_user)
+    REFERENCES app.user (id)
+    ON UPDATE RESTRICT
+    ON DELETE RESTRICT
+    NOT DEFERRABLE
+);
