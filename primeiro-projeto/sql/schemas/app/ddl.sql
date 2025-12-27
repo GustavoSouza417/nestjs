@@ -31,8 +31,10 @@ CREATE TABLE app.post (
 
   is_deleted  BOOLEAN NOT NULL DEFAULT FALSE,
 
-  title VARCHAR(100)  NOT NULL,
-  body  VARCHAR(2000) NOT NULL,
+  title    VARCHAR(100)  NOT NULL,
+  body     VARCHAR(5000) NOT NULL,
+  likes    INTEGER       NOT NULL DEFAULT 0,
+  dislikes INTEGER       NOT NULL DEFAULT 0,
 
   s_app_t_user_c_user INTEGER NOT NULL,
 
@@ -55,7 +57,9 @@ CREATE TABLE app.comment (
 
   is_deleted  BOOLEAN NOT NULL DEFAULT FALSE,
 
-  body VARCHAR(2000) NOT NULL,
+  body     VARCHAR(2000) NOT NULL,
+  likes    INTEGER       NOT NULL DEFAULT 0,
+  dislikes INTEGER       NOT NULL DEFAULT 0,
 
   s_app_t_post_c_post INTEGER NOT NULL,
   s_app_t_user_c_user INTEGER NOT NULL,
