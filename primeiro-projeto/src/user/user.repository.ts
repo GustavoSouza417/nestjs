@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { user } from '../../prisma/generated/prisma/client.js';
+import { UserCreateInterface } from './interface/user-create.interface';
 
 @Injectable()
 export class UserRepository {
@@ -14,5 +15,20 @@ export class UserRepository {
     return await this.prisma.user.findUnique ({
       where: { id }
     });
+  }
+
+  public async create(user: UserCreateInterface): Promise<string> {
+    const newUser: user = await this.prisma.user.create ({
+      data: {
+        name: user.name,
+        birthdate: user.birthdate,
+        sex: user.sex,
+        email: user.email,
+        phone: user.phone,
+        password: user.password
+      }
+    });
+
+    return newUser.id;
   }
 }

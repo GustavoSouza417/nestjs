@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, HttpCode, HttpStatus, Param, ParseUUIDPipe } from '@nestjs/common';
 import { UserService } from './user.service';
-import { user } from '../../prisma/generated/prisma/client.js';
+import { user } from '../../prisma/generated/prisma/client';
+import { UserCreateDto } from './dto/user-create.dto';
 
 @Controller('users')
 export class UserController {
@@ -16,5 +17,13 @@ export class UserController {
     @Param('id', new ParseUUIDPipe()) id: string
   ): Promise<user | null> {
     return this.userService.findOne(id);
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  public async create (
+    @Body () dto: UserCreateDto
+  ): Promise<string> {
+    return this.userService.create(dto);
   }
 }
