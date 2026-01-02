@@ -24,6 +24,7 @@ export class UserController {
   public async create (
     @Body () dto: UserCreateDto
   ): Promise<string> {
-    return this.userService.create(dto);
+    const { confirmPassword, ...data } = dto;
+    return this.userService.create(data);
   }
 }

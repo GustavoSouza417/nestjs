@@ -17,14 +17,14 @@ export class UserService {
     return await this.userRepository.findOne(id);
   }
 
-  public async create(dto: UserCreateDto): Promise<string> {
-    const hashedPassword: string = await bcrypt.hash(dto.password, 10);
+  public async create(data: Omit<UserCreateDto, 'confirmPassword'>): Promise<string> {
+    const hashedPassword: string = await bcrypt.hash(data.password, 10);
 
-    const userToSave: UserCreateInterface = {
-      ...dto,
+    const user: UserCreateInterface = {
+      ...data,
       password: hashedPassword
     }
 
-    return this.userRepository.create(userToSave);
+    return this.userRepository.create(user);
   }
 }
